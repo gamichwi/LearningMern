@@ -3,9 +3,8 @@ import React, { useRef, useEffect } from "react";
 import "./Map.css";
 
 const Map = props => {
-  const mapRef = useRef();
-    console.log(process.env.REACT_APP_API_KEY);
-    
+  const mapRef = useRef();    
+  
   const { center, zoom } = props;
 
   useEffect(() => {
