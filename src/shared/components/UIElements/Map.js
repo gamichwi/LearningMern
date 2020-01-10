@@ -4,7 +4,8 @@ import "./Map.css";
 
 const Map = props => {
   const mapRef = useRef();
-
+    console.log(process.env.REACT_APP_API_KEY);
+    
   const { center, zoom } = props;
 
   useEffect(() => {
