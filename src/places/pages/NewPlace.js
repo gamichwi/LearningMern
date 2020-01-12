@@ -13,7 +13,6 @@ const NewPlace = () => {
 
   const descriptionInputHandler = useCallback((id, value, isValid) => {}, []);
 
-
   return (
     <form className="place-form">
       <Input
