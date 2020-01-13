@@ -46,6 +46,7 @@ const NewPlace = () => {
       address: {
         value: "",
         isValid: false
+      }
     },
     isValid: false
   });
