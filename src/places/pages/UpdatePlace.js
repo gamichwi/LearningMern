@@ -1,5 +1,5 @@
 import React from "react";
-import { useParmas } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 import Input from "../../shared/components/FormElements/Input";
 import Button from "../../shared/components/FormElements/Button";
@@ -7,6 +7,8 @@ import {
   VALIDATOR_REQUIRE,
   VALIDATOR_MINLENGTH
 } from "../../shared/util/validators";
+
+import "./PlaceForm.css";
 
 const DUMMY_PLACES = [
   {
@@ -38,7 +40,7 @@ const DUMMY_PLACES = [
 ];
 
 const UpdatePlace = () => {
-  const placeId = useParmas().placeId;
+  const placeId = useParams().placeId;
 
   const identifiedPlace = DUMMY_PLACES.find(p => p.id === placeId);
   if (!identifiedPlace) {
@@ -65,7 +67,7 @@ const UpdatePlace = () => {
         id="description"
         element="textarea"
         label="Description"
-        validators={[VALIDATOR_MINLENGTH()]}
+        validators={[VALIDATOR_MINLENGTH(5)]}
         errorText="Please enter a valid description (min. 5 characters)."
         onInput={() => {}}
         value={identifiedPlace.description}
