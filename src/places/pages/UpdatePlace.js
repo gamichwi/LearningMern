@@ -1,71 +1,98 @@
-import React from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 
-import Input from '../../shared/components/FormElements/Input';
-import Button from '../../shared/components/FormElements/Button';
+import Input from "../../shared/components/FormElements/Input";
+import Button from "../../shared/components/FormElements/Button";
 import {
   VALIDATOR_REQUIRE,
   VALIDATOR_MINLENGTH
-} from '../../shared/util/validators';
-import { useForm } from '../../shared/hooks/form-hook';
-import './PlaceForm.css';
+} from "../../shared/util/validators";
+import { useForm } from "../../shared/hooks/form-hook";
+import "./PlaceForm.css";
 
 const DUMMY_PLACES = [
   {
-      id: 'p1',
-      title: 'Scary Castle',
-      description: 'Check out this scary-ass castle!',
-      imageUrl: 'http://i2.cdn.turner.com/cnnnext/dam/assets/160617122741-castle-frankenstein-darmstadt-1-super-169.jpg',
-      address: 'Burg Frankenstein, 64367 Mühltal, Germany',
-      location: {
-          lat: 49.793716,
-          lng: 8.6658966
-      },
-      creator: 'u1'
+    id: "p1",
+    title: "Scary Castle",
+    description: "Check out this scary-ass castle!",
+    imageUrl:
+      "http://i2.cdn.turner.com/cnnnext/dam/assets/160617122741-castle-frankenstein-darmstadt-1-super-169.jpg",
+    address: "Burg Frankenstein, 64367 Mühltal, Germany",
+    location: {
+      lat: 49.793716,
+      lng: 8.6658966
+    },
+    creator: "u1"
   },
   {
-      id: 'p2',
-      title: 'Scary Castle',
-      description: 'Check out this scary-ass castle!',
-      imageUrl: 'http://i2.cdn.turner.com/cnnnext/dam/assets/160617122741-castle-frankenstein-darmstadt-1-super-169.jpg',
-      address: 'Burg Frankenstein, 64367 Mühltal, Germany',
-      location: {
-          lat: 49.793716,
-          lng: 8.6658966
-      },
-      creator: 'u2'
+    id: "p2",
+    title: "Scary Castle",
+    description: "Check out this scary-ass castle!",
+    imageUrl:
+      "http://i2.cdn.turner.com/cnnnext/dam/assets/160617122741-castle-frankenstein-darmstadt-1-super-169.jpg",
+    address: "Burg Frankenstein, 64367 Mühltal, Germany",
+    location: {
+      lat: 49.793716,
+      lng: 8.6658966
+    },
+    creator: "u2"
   }
 ];
 
 const UpdatePlace = () => {
+  const [isLoading, setIsLoading] = useState(true);
   const placeId = useParams().placeId;
+
+  const [formState, inputHandler, setFormData] = useForm(
+    {
+      title: {
+        value: "",
+        isValid: false
+      },
+      description: {
+        value: "",
+        isValid: false
+      }
+    },
+    false
+  );
 
   const identifiedPlace = DUMMY_PLACES.find(p => p.id === placeId);
 
-  const [formState, inputHandler] = useForm(
-    {
-      title: {
-        value: identifiedPlace.title,
-        isValid: true
+  useEffect(() => {
+    setFormData(
+      {
+        title: {
+          value: identifiedPlace.title,
+          isValid: true
+        },
+        description: {
+          value: identifiedPlace.description,
+          isValid: true
+        }
       },
-      description: {
-        value: identifiedPlace.description,
-        isValid: true
-      }
-    },
-    true
-  );
+      true
+    );
+    setIsLoading(false);
+  }, [setFormData, identifiedPlace]);
 
   const placeUpdateSubmitHandler = event => {
     event.preventDefault();
     console.log(formState.inputs);
-
-  }
+  };
 
   if (!identifiedPlace) {
     return (
       <div className="center">
         <h2>Could not find place!</h2>
+      </div>
+    );
+  }
+
+  if (isLoading) {
+    return (
+      <div className="center">
+        <h2>Loading...</h2>
       </div>
     );
   }
