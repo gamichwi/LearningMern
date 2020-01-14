@@ -1,41 +1,39 @@
-import React from "react";
-import { useParams } from "react-router-dom";
+import React from 'react';
+import { useParams } from 'react-router-dom';
 
-import Input from "../../shared/components/FormElements/Input";
-import Button from "../../shared/components/FormElements/Button";
+import Input from '../../shared/components/FormElements/Input';
+import Button from '../../shared/components/FormElements/Button';
 import {
   VALIDATOR_REQUIRE,
   VALIDATOR_MINLENGTH
-} from "../../shared/util/validators";
-
-import "./PlaceForm.css";
+} from '../../shared/util/validators';
+import { useForm } from '../../shared/hooks/form-hook';
+import './PlaceForm.css';
 
 const DUMMY_PLACES = [
   {
-    id: "p1",
-    title: "Scary Castle",
-    description: "Check out this scary-ass castle!",
-    imageUrl:
-      "http://i2.cdn.turner.com/cnnnext/dam/assets/160617122741-castle-frankenstein-darmstadt-1-super-169.jpg",
-    address: "Burg Frankenstein, 64367 Mühltal, Germany",
-    location: {
-      lat: 49.793716,
-      lng: 8.6658966
-    },
-    creator: "u1"
+      id: 'p1',
+      title: 'Scary Castle',
+      description: 'Check out this scary-ass castle!',
+      imageUrl: 'http://i2.cdn.turner.com/cnnnext/dam/assets/160617122741-castle-frankenstein-darmstadt-1-super-169.jpg',
+      address: 'Burg Frankenstein, 64367 Mühltal, Germany',
+      location: {
+          lat: 49.793716,
+          lng: 8.6658966
+      },
+      creator: 'u1'
   },
   {
-    id: "p2",
-    title: "Scary Castle",
-    description: "Check out this scary-ass castle!",
-    imageUrl:
-      "http://i2.cdn.turner.com/cnnnext/dam/assets/160617122741-castle-frankenstein-darmstadt-1-super-169.jpg",
-    address: "Burg Frankenstein, 64367 Mühltal, Germany",
-    location: {
-      lat: 49.793716,
-      lng: 8.6658966
-    },
-    creator: "u2"
+      id: 'p2',
+      title: 'Scary Castle',
+      description: 'Check out this scary-ass castle!',
+      imageUrl: 'http://i2.cdn.turner.com/cnnnext/dam/assets/160617122741-castle-frankenstein-darmstadt-1-super-169.jpg',
+      address: 'Burg Frankenstein, 64367 Mühltal, Germany',
+      location: {
+          lat: 49.793716,
+          lng: 8.6658966
+      },
+      creator: 'u2'
   }
 ];
 
@@ -43,6 +41,27 @@ const UpdatePlace = () => {
   const placeId = useParams().placeId;
 
   const identifiedPlace = DUMMY_PLACES.find(p => p.id === placeId);
+
+  const [formState, inputHandler] = useForm(
+    {
+      title: {
+        value: identifiedPlace.title,
+        isValid: true
+      },
+      description: {
+        value: identifiedPlace.description,
+        isValid: true
+      }
+    },
+    true
+  );
+
+  const placeUpdateSubmitHandler = event => {
+    event.preventDefault();
+    console.log(formState.inputs);
+
+  }
+
   if (!identifiedPlace) {
     return (
       <div className="center">
@@ -50,8 +69,9 @@ const UpdatePlace = () => {
       </div>
     );
   }
+
   return (
-    <form className="place-form">
+    <form className="place-form" onSubmit={placeUpdateSubmitHandler}>
       <Input
         id="title"
         element="input"
@@ -59,9 +79,9 @@ const UpdatePlace = () => {
         label="Title"
         validators={[VALIDATOR_REQUIRE()]}
         errorText="Please enter a valid title."
-        onInput={() => {}}
-        value={identifiedPlace.title}
-        valid={true}
+        onInput={inputHandler}
+        initialValue={formState.inputs.title.value}
+        initialValid={formState.inputs.title.isValid}
       />
       <Input
         id="description"
@@ -69,11 +89,13 @@ const UpdatePlace = () => {
         label="Description"
         validators={[VALIDATOR_MINLENGTH(5)]}
         errorText="Please enter a valid description (min. 5 characters)."
-        onInput={() => {}}
-        value={identifiedPlace.description}
-        valid={true}
+        onInput={inputHandler}
+        initialValue={formState.inputs.description.value}
+        initialValid={formState.inputs.description.isValid}
       />
-      <Button type="submit" disabled={true}>UPDATE PLACE</Button>
+      <Button type="submit" disabled={!formState.isValid}>
+        UPDATE PLACE
+      </Button>
     </form>
   );
 };
