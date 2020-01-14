@@ -35,6 +35,7 @@ const NewPlace = () => {
 
   return (
     <form className="place-form" onSubmit={placeSubmitHandler}>
+      <h2>Add Place</h2>
       <Input
         id="title"
         element="input"
